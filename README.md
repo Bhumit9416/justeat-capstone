@@ -93,6 +93,72 @@ USER ──────────────── RESTAURANT ─────
 
 Six entities: `User`, `Restaurant`, `MenuItem`, `Order`, `OrderItem`, `UserPreference`
 
+## ER Diagram
+
+```mermaid
+erDiagram
+    USER {
+        bigint id PK
+        string username
+        string email
+        string password
+        string role
+        string resetToken
+        datetime resetTokenExpiry
+    }
+    RESTAURANT {
+        bigint id PK
+        string name
+        string cuisine
+        string location
+        string imageUrl
+        float rating
+        int ratingCount
+        bigint ownerId FK
+    }
+    MENU_ITEM {
+        bigint id PK
+        string name
+        string description
+        decimal price
+        string imageUrl
+        boolean isVeg
+        boolean isSpecial
+        boolean isDealOfDay
+        boolean isMostlyOrdered
+        bigint restaurantId FK
+    }
+    ORDER {
+        bigint id PK
+        string status
+        decimal totalAmount
+        datetime createdAt
+        bigint customerId FK
+        bigint restaurantId FK
+    }
+    ORDER_ITEM {
+        bigint id PK
+        int quantity
+        decimal price
+        bigint orderId FK
+        bigint menuItemId FK
+    }
+    USER_PREFERENCE {
+        bigint id PK
+        string cuisines
+        string dietaryRestrictions
+        bigint userId FK
+    }
+
+    USER ||--o{ RESTAURANT : "owns"
+    USER ||--o{ ORDER : "places"
+    USER ||--|| USER_PREFERENCE : "has"
+    RESTAURANT ||--o{ MENU_ITEM : "has"
+    RESTAURANT ||--o{ ORDER : "receives"
+    ORDER ||--o{ ORDER_ITEM : "contains"
+    MENU_ITEM ||--o{ ORDER_ITEM : "included in"
+```
+
 ---
 
 ## ⚙️ Prerequisites
@@ -143,7 +209,7 @@ docker compose up
 
 Starts:
 - PostgreSQL on `localhost:5432`
-- Backend on `localhost:8080`
+- Backend on `localhost:8081`
 
 Then run the frontend separately with `npm run dev`.
 
