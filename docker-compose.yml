@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: justeat-postgres
+    environment:
+      POSTGRES_DB: justeat
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Bhumit123
+    ports:
+      - "5432:5432"
+    volumes:
+      - justeat-db-data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: justeat-backend
+    depends_on:
+      - db
+    environment:
+      SERVER_PORT: 8081
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/justeat
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Bhumit123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      APP_JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      APP_JWT_EXPIRATION_MS: 86400000
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: bhumit9416@gmail.com
+      SPRING_MAIL_PASSWORD: llyykgwtevuawkzm
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST: smtp.gmail.com
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+
+volumes:
+  justeat-db-data:
+
