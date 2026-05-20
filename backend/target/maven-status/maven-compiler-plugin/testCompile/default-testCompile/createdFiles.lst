@@ -1,6 +1,0 @@
-com\justeat\service\OrderServiceTest.class
-com\justeat\service\MenuServiceTest.class
-com\justeat\security\JwtUtilTest.class
-com\justeat\service\UserPreferenceServiceTest.class
-com\justeat\service\AuthServiceTest.class
-com\justeat\service\RestaurantServiceTest.class
