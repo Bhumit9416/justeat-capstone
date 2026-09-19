@@ -34,6 +34,7 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
 
     private static final String[] PUBLIC_URLS = {
+            "/health",
             "/api/auth/**",
             "/api/restaurants",
             "/api/restaurants/**",

@@ -10,7 +10,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     List<Restaurant> findByOwnerId(Long ownerId);
 
-    @Query("SELECT r FROM Restaurant r WHERE " +
+    @Query("SELECT r FROM Restaurant r JOIN FETCH r.owner WHERE " +
            "(:name = '' OR LOWER(r.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
            "(:cuisine = '' OR LOWER(r.cuisine) LIKE LOWER(CONCAT('%', :cuisine, '%'))) AND " +
            "(:location = '' OR LOWER(r.location) LIKE LOWER(CONCAT('%', :location, '%')))")

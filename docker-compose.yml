@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   db:
     image: postgres:16-alpine
@@ -12,6 +10,12 @@ services:
       - "5432:5432"
     volumes:
       - justeat-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d justeat"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
 
   backend:
     build:
@@ -19,9 +23,10 @@ services:
       dockerfile: Dockerfile
     container_name: justeat-backend
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      SERVER_PORT: 8081
+      PORT: 8081
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/justeat
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: Bhumit123
@@ -32,13 +37,21 @@ services:
       SPRING_MAIL_PORT: 587
       SPRING_MAIL_USERNAME: bhumit9416@gmail.com
       SPRING_MAIL_PASSWORD: llyykgwtevuawkzm
-      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
-      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
-      SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST: smtp.gmail.com
     ports:
       - "8081:8081"
     restart: unless-stopped
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: justeat-frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "5173:80"
+    restart: unless-stopped
+
 volumes:
   justeat-db-data:
-

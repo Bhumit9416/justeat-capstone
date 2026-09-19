@@ -2,16 +2,26 @@ FROM maven:3.9.6-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-COPY . .
+COPY pom.xml .
+COPY src ./src
 
 RUN mvn clean package -DskipTests
 
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
 
-EXPOSE 8080
+COPY --from=build /app/target/JustEat.jar app.jar
 
-ENTRYPOINT ["java","-jar","app.jar"]
+EXPOSE 8081
+
+ENV PORT=8081
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=90s --retries=12 \
+  CMD curl -f http://localhost:8081/health || exit 1
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

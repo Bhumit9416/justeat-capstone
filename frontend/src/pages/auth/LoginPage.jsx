@@ -192,6 +192,26 @@ export default function LoginPage() {
               Create account
             </Link>
           </p>
+
+          <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-2">Demo accounts</p>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setForm({ username: "customer", password: "Customer@123" })}
+                className="text-xs font-semibold bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 hover:border-rose-300 hover:text-rose-600 transition"
+              >
+                Customer · Customer@123
+              </button>
+              <button
+                type="button"
+                onClick={() => setForm({ username: "owner", password: "Owner@123" })}
+                className="text-xs font-semibold bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 hover:border-rose-300 hover:text-rose-600 transition"
+              >
+                Owner · Owner@123
+              </button>
+            </div>
+          </div>
         </motion.div>
       </div>
     </div>
