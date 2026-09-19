@@ -22,6 +22,6 @@ EXPOSE 8081
 ENV PORT=8081
 
 HEALTHCHECK --interval=15s --timeout=5s --start-period=90s --retries=12 \
-  CMD curl -f http://localhost:8081/health || exit 1
+  CMD curl -f http://localhost:${PORT:-8081}/health || exit 1
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "",   // requests go through Vite proxy → http://localhost:8081
+  // Local Docker/Vite: same-origin /api proxy. Live: set VITE_API_URL to the backend URL.
+  baseURL: import.meta.env.VITE_API_URL || "",
 });
 
 api.interceptors.request.use((config) => {
